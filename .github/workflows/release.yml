@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Generate icons
+        run: node scripts/generate-icons.mjs
+
+      - name: Build extension
+        run: npm run build
+
+      - name: Package zip
+        run: |
+          cd build/chrome-mv3-prod
+          zip -r "$GITHUB_WORKSPACE/auto-typer-chrome.zip" .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: auto-typer-chrome.zip
+          name: Auto Typer ${{ github.ref_name }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false
