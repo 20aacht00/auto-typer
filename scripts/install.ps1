@@ -1,14 +1,11 @@
 # Auto Typer - Installer for non-technical users.
 # Downloads the latest pre-built extension from GitHub Releases, extracts it,
 # copies the folder path to the clipboard, and opens chrome://extensions.
-#
-# This file is fetched & run by install.bat so users only need to download
-# one file (install.bat) and double-click it.
 
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
-$OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
 
 $RepoOwner = "20aacht00"
 $RepoName = "auto-typer"
@@ -18,10 +15,6 @@ $ZipPath = Join-Path $env:TEMP "auto-typer-chrome.zip"
 
 $DownloadUrl = "https://github.com/$RepoOwner/$RepoName/releases/latest/download/$AssetName"
 
-function Write-Step($msg) { Write-Host $msg -ForegroundColor Yellow }
-function Write-Ok($msg) { Write-Host $msg -ForegroundColor Green }
-function Write-Err($msg) { Write-Host $msg -ForegroundColor Red }
-
 Write-Host ""
 Write-Host "  =======================================" -ForegroundColor Cyan
 Write-Host "      Auto Typer - نصب خودکار" -ForegroundColor Cyan
@@ -29,45 +22,51 @@ Write-Host "  =======================================" -ForegroundColor Cyan
 Write-Host ""
 
 # 1) Download
-Write-Step "1) در حال دانلود افزونه..."
+Write-Host "[1/3] در حال دانلود افزونه..." -ForegroundColor Yellow
 try {
     Invoke-WebRequest -Uri $DownloadUrl -OutFile $ZipPath -UseBasicParsing
 } catch {
-    Write-Err "خطا در دانلود. ممکن است هنوز نسخه‌ای منتشر نشده باشد."
-    Write-Err "از توسعه‌دهنده بخواهید یک نسخه (tag v...) منتشر کند."
     Write-Host ""
+    Write-Host "خطا در دانلود. ممکن است هنوز نسخه‌ای منتشر نشده باشد." -ForegroundColor Red
     Read-Host "برای خروج Enter بزن"
     exit 1
 }
-Write-Ok "   دانلود کامل شد."
+Write-Host "      انجام شد." -ForegroundColor Green
 
 # 2) Extract
-Write-Step "2) در حال استخراج فایل‌ها..."
+Write-Host "[2/3] در حال استخراج فایل‌ها..." -ForegroundColor Yellow
 if (Test-Path $InstallDir) {
     Remove-Item $InstallDir -Recurse -Force
 }
 Expand-Archive -Path $ZipPath -DestinationPath $InstallDir -Force
 Remove-Item $ZipPath -Force
-Write-Ok "   استخراج در: $InstallDir"
+Write-Host "      مسیر: $InstallDir" -ForegroundColor Green
 
-# 3) Copy path to clipboard so the user can paste it directly
+# 3) Copy path to clipboard
 Set-Clipboard -Value $InstallDir
 
 # 4) Open chrome extensions page
-Write-Step "3) باز کردن صفحه‌ی افزونه‌های کروم..."
-Start-Process "chrome://extensions"
+Write-Host "[3/3] باز کردن صفحه‌ی افزونه‌های کروم..." -ForegroundColor Yellow
+try {
+    Start-Process "chrome://extensions"
+} catch {
+    try { Start-Process "chrome.exe" -ArgumentList "chrome://extensions" } catch {}
+}
 
 Write-Host ""
-Write-Ok " نصب آماده است! اکنون این مراحل را دنبال کن:"
+Write-Host "  =======================================" -ForegroundColor Green
+Write-Host "  نصب آماده است! این مراحل را دنبال کن:" -ForegroundColor Green
+Write-Host "  =======================================" -ForegroundColor Green
 Write-Host ""
-Write-Host "   1. گوشه‌ی بالا-راست:  Developer mode  را روشن کن" -ForegroundColor White
-Write-Host "   2. روی  Load unpacked  کلیک کن" -ForegroundColor White
-Write-Host "   3. مسیر زیر (که کپی شده) را در نوار آدرس پنجره بازشده پیست کن:" -ForegroundColor White
+Write-Host "  1. گوشه بالا-راست: Developer mode را روشن کن" -ForegroundColor White
+Write-Host "  2. روی Load unpacked کلیک کن" -ForegroundColor White
+Write-Host "  3. مسیر زیر را پیست کن (Ctrl+V) و Enter بزن:" -ForegroundColor White
 Write-Host ""
-Write-Host "      $InstallDir" -ForegroundColor Cyan
+Write-Host "     $InstallDir" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "   4. روی پوشه کلیک کن و  Select Folder  را بزن" -ForegroundColor White
+Write-Host "  4. روی پوشه کلیک کن و Select Folder را بزن" -ForegroundColor White
 Write-Host ""
-Write-Host "  مسیر نصب در کلیپ‌بورد کپی شد — می‌توانی مستقیم پیست کنی (Ctrl+V)." -ForegroundColor DarkGray
+Write-Host "  مسیر در کلیپ‌بورد کپی شده — مستقیم Ctrl+V بزن." -ForegroundColor DarkGray
 Write-Host ""
-Read-Host "برای پایان Enter بزن"
+Write-Host "  =======================================" -ForegroundColor Cyan
+Read-Host "  پایان — Enter بزن"
