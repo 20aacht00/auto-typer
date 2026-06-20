@@ -1,122 +1,156 @@
-# Auto Typer
+# Auto Typer ⚡
 
-افزونه‌ی مرورگر برای درج سریع متن در هر فیلد ورودی وب‌سایت. متن را در پنجره‌ی افزونه وارد می‌کنید و با یک کلیک (یا میانبر) در فیلد دلخواه درج می‌شود.
+افزونه‌ی مرورگر برای **تایپ خودکار متن** در هر فیلد ورودی وب‌سایت — حتی سایت‌هایی که کپی/پیست را مسدود کرده‌اند. متن را در پنل افزونه وارد می‌کنید و افزونه آن را حرف‌به‌حرف (شبیه تایپ واقعی کیبورد) در فیلد دلخواه تایپ می‌کند.
 
-A browser extension that injects text into any website input field. Paste text into the popup, click inject, and it appears in the target field — fully compatible with React, Angular, Vue and contentEditable editors.
+---
+
+## 🟢 نصب آسان (برای کاربران عادی — بدون دانش برنامه‌نویسی)
+
+کافی است **یک فایل** دانلود و اجرا کنید. نه Node.js لازم است، نه npm، نه هیچ ابزار دیگری.
+
+### مراحل
+
+1. فایل [`install.bat`](./install.bat) را از این ریپازیتوری دانلود کنید (روی آن کلیک کنید، سپس دکمه‌ی **Download** یا **Raw** را بزنید).
+2. فایل دانلودشده را **دابل‌کلیک** کنید.
+3. نصب‌کننده به‌صورت خودکار:
+   - آخرین نسخه‌ی آماده‌ی افزونه را دانلود می‌کند
+   - فایل‌ها را استخراج می‌کند
+   - مسیر پوشه را در کلیپ‌بورد کپی می‌کند
+   - صفحه‌ی افزونه‌های کروم را باز می‌کند
+4. در صفحه‌ی بازشده‌ی کروم:
+   - **Developer mode** (گوشه بالا-راست) را روشن کنید
+   - روی **Load unpacked** کلیک کنید
+   - مسیر کپی‌شده را پیست کنید (`Ctrl+V`) و **Select Folder** را بزنید
+
+تمام! آیکون Auto Typer در نوار ابزار ظاهر می‌شود. 🎉
+
+> 💡 اگر روی آیکون کلیک کنید، یک **پنل کناری** باز می‌شود که هنگام کار با صفحه باز می‌ماند و نمی‌پرد.
+
+---
 
 ## امکانات
 
-- **درج در فیلد فعال**: متن مستقیماً در عنصری که فوکوس دارد درج می‌شود.
-- **حالت انتخاب (Picker)**: روی هر فیلدی کلیک کنید تا متن آنجا درج شود (با highlight قابل دیدن).
-- **سازگار با فریم‌ورک‌ها**: از native value setter + event dispatch استفاده می‌کند تا React/Angular/Vue تغییر را تشخیص دهند.
-- **پشتیبانی از contentEditable**: برای ویرایشگرهای غنی‌متن مثل Gmail، Slack و ... .
-- **میانبرهای کیبورد**: درج سریع بدون باز کردن popup.
+- **تایپ واقعی حرف‌به‌حرف**: شبیه‌سازی کامل رویدادهای کیبورد (`keydown`/`input`/`keyup`) — از پس سایت‌هایی که paste را بسته‌اند برمی‌آید.
+- **کنترل سرعت**: از حداکثر سرعت تا حالت کند، قابل تنظیم در بخش تنظیمات.
+- **دو حالت انتخاب فیلد**:
+  - **فیلد فعال**: تایپ مستقیم در عنصری که فوکوس دارد.
+  - **انتخاب (Picker)**: هر فیلدی را با کلیک انتخاب کنید (با هایلایت قابل دیدن).
+- **سازگاری کامل**: با React، Angular، Vue و ویرایشگرهای غنی‌متن (Gmail، Slack و ...).
+- **پنل کناری (Side Panel)**: هنگام کار با صفحه باز می‌ماند و نمی‌پرد.
+- **میانبرهای کیبورد**: تایپ سریع بدون باز کردن پنل.
 - **ذخیره‌ی خودکار**: آخرین متن بین جلسات حفظ می‌شود.
+- **بدون اسکرول اضافی**: موقعیت اسکرول صفحه هنگام انتخاب فیلد دست‌نخورده می‌ماند.
 
 ## میانبرها
 
 | میانبر | عملکرد |
 |---|---|
-| `Ctrl+Shift+Space` (`Cmd+Shift+Space` در مک) | درج آخرین متن در فیلد فعال |
+| `Ctrl+Shift+Space` (`Cmd+Shift+Space` در مک) | تایپ آخرین متن در فیلد فعال |
 | `Ctrl+Shift+E` (`Cmd+Shift+E` در مک) | فعال/غیرفعال کردن حالت انتخاب |
 | `Esc` (در حالت انتخاب) | لغو حالت انتخاب |
 
-## ساخت و نصب
+## سرعت تایپ
+
+در بخش تنظیمات (آیکون چرخ‌دنده) قابل تنظیم است:
+
+| حالت | تاخیر بین کاراکترها |
+|---|---|
+| حداکثر سرعت (پیش‌فرض) | 0ms |
+| سریع | 5ms |
+| متوسط | 25ms |
+| کند | 60ms |
+| آنی | درج یکجا (بدون تایپ حرف‌به‌حرف) |
+
+---
+
+## نصب روی موبایل
+
+مرورگرهای موبایل معمولاً از افزونه‌ها پشتیبانی نمی‌کنند، مگر موارد زیر:
+
+- **Android — Kiwi Browser** (مبتنی بر Chromium): از افزونه‌های Chrome پشتیبانی می‌کند. افزونه را در Chrome Web Store منتشر کنید و در Kiwi نصب کنید.
+- **iOS — Safari 15+**: از Web Extensions پشتیبانی می‌کند. باید با Xcode به‌عنوان Safari Web Extension بسته‌بندی شود.
+
+---
+
+## 🛠 برای توسعه‌دهندگان (Build از سورس)
 
 ### پیش‌نیازها
 
 - Node.js 18+ و npm
-- برای نصب وابستگی‌های native روی ویندوز، اجرای `npm install` به Python و ابزار build نیاز دارد. اگر نصب شکست خورد:
+
+### نصب وابستگی‌ها (ویندوز)
+
+روی ویندوز ممکن است `npm install` به‌خاطر وابستگی‌های native شکست بخورد. در این صورت:
 
 ```powershell
 npm install --ignore-scripts --no-audit --no-fund
 npm rebuild sharp
 ```
 
-### مراحل
+### ساخت
 
 ```powershell
-# نصب وابستگی‌ها
-npm install
-
 # تولید آیکون‌ها (یک‌بار)
 node scripts/generate-icons.mjs
 
 # ساخت افزونه (خروجی در build/chrome-mv3-prod)
 npm run build
+
+# توسعه با HMR
+npm run dev
+
+# ساخت zip برای انتشار
+npm run package
 ```
 
-### بارگذاری در مرورگر (دسکتاپ)
+### بارگذاری دستی در مرورگر
 
-1. کروم/اج/برو را باز کنید و به `chrome://extensions` بروید.
-2. «Developer mode» (حالت توسعه‌دهنده) را در گوشه بالا راست فعال کنید.
-3. روی «Load unpacked» کلیک کنید و پوشه‌ی `build/chrome-mv3-prod` را انتخاب کنید.
-4. آیکون Auto Typer در نوار ابزار ظاهر می‌شود.
+1. به `chrome://extensions` بروید.
+2. **Developer mode** را فعال کنید.
+3. **Load unpacked** → پوشه‌ی `build/chrome-mv3-prod`.
 
-### توسعه
+### انتشار نسخه‌ی جدید (برای نگهدارنده‌ی ریپو)
+
+هر بار که یک tag با فرمت `v*` push کنید، GitHub Actions به‌صورت خودکار افزونه را build کرده و در Releases منتشر می‌کند. سپس کاربران با `install.bat` آن را دریافت می‌کنند:
 
 ```powershell
-npm run dev
+git tag v0.2.0
+git push origin v0.2.0
 ```
 
-HMR فعال است و تغییرات به‌صورت زنده بارگذاری می‌شوند.
-
-## نصب روی موبایل
-
-مرورگرهای موبایل معمولاً از افزونه‌ها پشتیبانی نمی‌کنند، مگر موارد زیر:
-
-### Android
-
-- **Kiwi Browser** (مبتنی بر Chromium): از افزونه‌های Chrome Web Store و فایل‌های `.crx` پشتیبانی می‌کند. ساده‌ترین راه: افزونه را در Chrome Web Store منتشر کنید و در Kiwi نصب کنید.
-- **Edge Mobile**: پشتیبانی محدود از افزونه‌ها.
-- راه دستی: فایل zip افزونه را روی گوشی کپی کنید، در `edge://extensions` یا `kiwe://extensions` حالت developer را فعال و load unpacked کنید (ممکن است محدودیت‌هایی داشته باشد).
-
-### iOS
-
-- **Safari 15+**: از Web Extensions پشتیبانی می‌کند. باید افزونه را به Xcode به‌عنوان Safari Web Extension بسته‌بندی کنید. راهنما: [Converting a web extension for Safari](https://developer.apple.com/documentation/safariservices/safari_web_extensions/converting_a_web_extension_to_safari_web_extensions)
+---
 
 ## معماری
 
 ```
 src/
-├── popup.tsx                 # رابط کاربری Popup (React)
-├── background.ts             # Service Worker (میانبرها)
+├── sidepanel.tsx              # پنل کناری (رابط اصلی)
+├── background.ts             # Service Worker (میانبرها + باز کردن side panel)
 ├── contents/
-│   └── injector.ts           # Content script: دریافت پیام و تزریق
+│   └── injector.ts           # Content script: دریافت پیام و تایپ
+├── components/
+│   └── typer-panel.tsx       # کامپوننت مشترک UI
 ├── lib/
-│   ├── inject-value.ts       # منطق اصلی تزریق (سازگار با فریم‌ورک‌ها)
+│   ├── type-text.ts          # موتور تایپ حرف‌به‌حرف (keyboard events)
+│   ├── inject-value.ts       # درج آنی (حالت instant)
 │   ├── picker.ts             # overlay انتخاب فیلد با کلیک
-│   ├── messaging.ts          # ارسال پیام به tab فعال
+│   ├── messaging.ts          # ارتباط popup ↔ content
 │   ├── storage.ts            # wrapper برای chrome.storage
-│   └── use-extension-state.ts # hook مشترک state
-├── types/
-│   └── messages.ts           # تعریف type پیام‌ها
-└── style.css                 # استایل پایه + Tailwind
+│   └── use-extension-state.ts # hook مدیریت state
+└── types/
+    └── messages.ts           # تعریف type پیام‌ها
 ```
 
-### چرا فقط `el.value = x` کافی نیست؟
+### چرا تایپ حرف‌به‌حرف؟
 
-React و Vue روی input‌ها value را به‌صورت controlled track می‌کنند و به تغییر مستقیم `value` واکنش نشان نمی‌دهند. راه‌حل: استفاده از native setter روی prototype و سپس dispatch رویداد `input`:
-
-```typescript
-const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set
-setter.call(element, text)
-element.dispatchEvent(new Event("input", { bubbles: true }))
-```
-
-این الگو در `src/lib/inject-value.ts` پیاده‌سازی شده و برای `<input>`, `<textarea>`, `<select>` و عناصر `contentEditable` کار می‌کند.
+برخی سایت‌ها رویداد `paste` را با `preventDefault()` مسدود می‌کنند تا کاربر نتواند متن را پیست کند. موتور تایپ این محدودیت را دور می‌زند چون هیچ رویداد `paste`‌ای تولید نمی‌کند — فقط رویدادهای منفرد کیبورد (`keydown`/`input`/`keyup`) را شبیه‌سازی می‌کند که دقیقاً مثل تایپ واقعی است.
 
 ## محدودیت‌ها
 
-- صفحات داخلی مرورگر (`chrome://`, `edge://`) اجازه‌ی content script نمی‌دهند.
-- سایت‌هایی با CSP بسیار سخت‌گیرانه ممکن است اجرای script را مسدود کنند.
-- ویرایشگرهای مبتنی بر canvas (مثل Google Docs کلاسیک) نیاز به شبیه‌سازی رویدادهای کیبورد دارند که در نسخه‌ی فعلی پشتیبانی نمی‌شود.
-- انتشار در Chrome Web Store نیاز به پرداخت یک‌بارۀ ۵ دلاری دارد.
+- صفحات داخلی مرورگر (`chrome://`، `edge://`) اجازه‌ی content script نمی‌دهند.
+- ویرایشگرهای مبتنی بر canvas (مثل Google Docs کلاسیک) به‌خوبی پشتیبانی نمی‌شوند.
+- انتشار در Chrome Web Store نیاز به پرداخت یک‌باره‌ی ۵ دلاری دارد.
 
-## انتشار (Chrome Web Store)
+## مجوز
 
-```powershell
-npm run package    # خروجی: build/chrome-mv3-prod.zip
-```
-
-سپس فایل zip را در [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) آپلود کنید.
+MIT
