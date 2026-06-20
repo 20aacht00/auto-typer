@@ -1,48 +1,51 @@
 @echo off
 REM ============================================================
 REM  Auto Typer - one-click installer (Windows)
-REM  SELF-CONTAINED: no external script download needed.
-REM  Just double-click this file. Pure ASCII - no encoding issues.
+REM  SELF-CONTAINED: all logic in this file. Pure ASCII.
 REM ============================================================
 
-powershell -ExecutionPolicy Bypass -NoProfile -Command ^
-  "$ErrorActionPreference='Stop';" ^
-  "$ProgressPreference='SilentlyContinue';" ^
-  "$dir=$env:LOCALAPPDATA+'\auto-typer';" ^
-  "$zip=$env:TEMP+'\auto-typer-chrome.zip';" ^
-  "$url='https://github.com/20aacht00/auto-typer/releases/latest/download/auto-typer-chrome.zip';" ^
-  "Write-Host '';" ^
-  "Write-Host '  =======================================' -ForegroundColor Cyan;" ^
-  "Write-Host '      Auto Typer - Installer' -ForegroundColor Cyan;" ^
-  "Write-Host '  =======================================' -ForegroundColor Cyan;" ^
-  "Write-Host '';" ^
-  "Write-Host '[1/3] Downloading extension...' -ForegroundColor Yellow;" ^
-  "try { Invoke-WebRequest -UseBasicParsing $url -OutFile $zip } catch { Write-Host 'ERROR: Download failed. Check internet or release may not exist.' -ForegroundColor Red; Read-Host 'Press Enter'; exit 1 };" ^
-  "Write-Host '      Done.' -ForegroundColor Green;" ^
-  "Write-Host '[2/3] Extracting files...' -ForegroundColor Yellow;" ^
-  "if (Test-Path $dir) { Remove-Item $dir -Recurse -Force };" ^
-  "Expand-Archive $zip $dir -Force;" ^
-  "Remove-Item $zip -Force;" ^
-  "Set-Clipboard $dir;" ^
-  "Write-Host '      Location:' $dir -ForegroundColor Green;" ^
-  "Write-Host '[3/3] Opening Chrome extensions page...' -ForegroundColor Yellow;" ^
-  "try { Start-Process 'chrome://extensions' } catch {};" ^
-  "Write-Host '';" ^
-  "Write-Host '  =======================================' -ForegroundColor Green;" ^
-  "Write-Host '  DONE! Now in the Chrome page:' -ForegroundColor Green;" ^
-  "Write-Host '  =======================================' -ForegroundColor Green;" ^
-  "Write-Host '';" ^
-  "Write-Host '  1. Turn ON  Developer mode  (top-right)' -ForegroundColor White;" ^
-  "Write-Host '  2. Click  Load unpacked' -ForegroundColor White;" ^
-  "Write-Host '  3. Paste this path (Ctrl+V) + Enter:' -ForegroundColor White;" ^
-  "Write-Host '';" ^
-  "Write-Host '    ' $dir -ForegroundColor Cyan;" ^
-  "Write-Host '';" ^
-  "Write-Host '  4. Click  Select Folder' -ForegroundColor White;" ^
-  "Write-Host '';" ^
-  "Write-Host '  Path is in clipboard - just Ctrl+V.' -ForegroundColor DarkGray;" ^
-  "Write-Host '';" ^
-  "Read-Host '  Press Enter to finish'"
+echo.
+echo   =======================================
+echo       Auto Typer - Installer
+echo   =======================================
+echo.
+
+echo [1/3] Downloading extension...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue'; Invoke-WebRequest 'https://github.com/20aacht00/auto-typer/releases/latest/download/auto-typer-chrome.zip' -OutFile '%TEMP%\at.zip' -UseBasicParsing"
+if not exist "%TEMP%\at.zip" goto :error
+echo       Done.
+
+echo [2/3] Extracting files...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='Stop'; if (Test-Path '%LOCALAPPDATA%\auto-typer') { Remove-Item '%LOCALAPPDATA%\auto-typer' -Recurse -Force }; Expand-Archive '%TEMP%\at.zip' '%LOCALAPPDATA%\auto-typer' -Force; Remove-Item '%TEMP%\at.zip'"
+if not exist "%LOCALAPPDATA%\auto-typer\manifest.json" goto :error
+echo       Done.
+
+echo [3/3] Copying path and opening Chrome...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-Clipboard '%LOCALAPPDATA%\auto-typer'"
+start "" "chrome://extensions"
 
 echo.
+echo   =======================================
+echo   SUCCESS! Follow these steps in Chrome:
+echo   =======================================
+echo.
+echo   1. Turn ON  Developer mode  (top-right)
+echo   2. Click  Load unpacked
+echo   3. Paste this path (Ctrl+V):
+echo.
+echo      %LOCALAPPDATA%\auto-typer
+echo.
+echo   4. Select Folder
+echo.
+echo   Path is in clipboard - just Ctrl+V.
+echo.
 pause
+exit /b 0
+
+:error
+echo.
+echo   INSTALLATION FAILED.
+echo   Check your internet connection and try again.
+echo.
+pause
+exit /b 1
